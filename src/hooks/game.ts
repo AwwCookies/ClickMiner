@@ -16,14 +16,6 @@ class Item {
   getRarity(): Rarity {
     return this.rarity
   }
-  tooltip(): string {
-    return `
-    <b>${this.name}</b>
-    <div class="test">
-      <p class="orange">Hey!</p>
-    </div>
-    `
-  }
 }
 
 class Inventory {

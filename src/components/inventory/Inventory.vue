@@ -1,5 +1,7 @@
 <template>
-  <h1>{{ name }}: ({{ inventory.getItems().length }}/{{inventory.getMax()}})</h1>
+  <h1>
+    {{ name }}: ({{ inventory.getItems().length }}/{{ inventory.getMax() }})
+  </h1>
   <div class="inventory">
     <Item
       v-for="item in inventory.getItems()"
