@@ -113,6 +113,7 @@ function fundBuilding(building: Building) {
   if (canAffordBuilding(building)) {
     state.gold -= getBuildingCost(building)
     state.funding[building.name]++
+    // @ts-ignore
     building.effect(state)
     console.log(`${building.name} is being funded`)
   }
