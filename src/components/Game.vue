@@ -25,7 +25,7 @@
           <p>Experience/s: {{ experiencePerSecond }}</p>
         </div>
       </div>
-      <div class="cave-entrance" @click="mineClicked"></div>
+      <CaveEntrance/>
     </div>
     <div class="buyables">
       <div class="gamble">some gamble function here</div>
@@ -40,37 +40,57 @@
       </div>
     </div>
     <div class="player">
-      <Inventory :inventory="inventory" name="Latest Finds"/>
+      <Inventory :inventory="inventory" name="Latest Finds" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { useGame } from "../hooks/game";
-import Inventory from "./inventory/Inventory.vue"
-import Minions from "./Minions.vue"
-import Buildings from "./Buildings.vue"
+import Inventory from "./inventory/Inventory.vue";
+import Minions from "./Minions.vue";
+import Buildings from "./Buildings.vue";
+import CaveEntrance from "./CaveEntrance.vue"
 export default defineComponent({
   components: {
     Inventory,
     Minions,
-    Buildings
+    Buildings,
+    CaveEntrance
   },
   setup() {
     const { level, curExp, neededExp } = useGame();
-    const currentTab = ref("")
+    const currentTab = ref("");
+
+    // setTimeout(() => {
+    //   show.value = false
+    // }, 1000)
+    // setTimeout(() => {
+    //   show.value = true
+    // }, 2000)
+
+
+
+    // onMounted(() => {
+    //   const mine: HTMLDivElement = document.getElementsByClassName("cave-entrance")[0]
+    //   const goldCoinImg: HTMLImageElement = document.createElement("img")
+    //   goldCoinImg.className = "goldCoin"
+    //   goldCoinImg.style = "transform: translateX(-100%)"
+    //   goldCoinImg.src = "src/assets/images/gold_coin.png"
+    //   mine.appendChild(goldCoinImg)
+    // })
 
     const getCurrentTab = computed(() => {
       switch (currentTab.value) {
         case "minions": {
-          return Minions
+          return Minions;
         }
         case "buildings": {
-          return Buildings
+          return Buildings;
         }
       }
-    })
+    });
 
     const xpbar = computed(() => {
       return `Level: ${level.value} Experience: ${curExp.value}/${neededExp.value}`;
@@ -93,6 +113,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+
 .game {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -100,6 +122,7 @@ export default defineComponent({
   column-gap: 0.2em;
   height: 80vh;
 }
+
 .mine {
   display: flex;
   flex-direction: column;
