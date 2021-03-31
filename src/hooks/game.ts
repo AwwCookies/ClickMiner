@@ -3,12 +3,12 @@ import { EventEmitter } from 'events';
 import { Chance } from "chance";
 
 import { minions, getMinion } from "./minions"
-import { Building, buildings } from "./buildings"
+import { Building, IBuilding, buildings, School, Temple, getBuilding } from "./buildings"
 import { Item, Rarity } from "./inventory/item"
 import { Inventory } from "./inventory/inventory"
 
 // Variables
-interface IState {
+export interface IState {
   time: number;
   level: number;
   curExp: number;
@@ -16,6 +16,8 @@ interface IState {
   skillPoints: number;
   gold: number;
   diamonds: number;
+  goldLimit: number;
+  diamondLimit: number;
   goldPerSecond: number;
   diamondsPerSecond: number;
   clickEfficiency: number;
@@ -24,6 +26,7 @@ interface IState {
   unlockedAchievements: Array<Achievement>;
   inventory: Inventory;
   minionsOwned: {[key: string]: number}
+  funding: {[key: string]: number}
 }
 
 const state = reactive<IState>({
@@ -32,7 +35,9 @@ const state = reactive<IState>({
   curExp: 50,
   neededExp: 1000,
   skillPoints: 4,
-  gold: 100000,
+  gold: 2000,
+  goldLimit: 100_000,
+  diamondLimit: 1_000,
   diamonds: 0,
   goldPerSecond: 1,
   diamondsPerSecond: 0.5,
@@ -41,12 +46,18 @@ const state = reactive<IState>({
   experiencePerSecond: 250,
   unlockedAchievements: [],
   inventory: new Inventory(),
-  minionsOwned: {}
+  minionsOwned: {},
+  funding: {}
 })
 
 // Populate state.minions
 for (const minion of minions) {
   state.minionsOwned[minion.name] = 0
+}
+
+// Populate state.funding
+for (const building of buildings) {
+  state.funding[building.name] = 0
 }
 
 
@@ -76,6 +87,45 @@ function canBuyMinion(minionName: string): boolean {
 const events = new EventEmitter()
 const chance = new Chance()
 
+function canAfford(amountNeeded: number, currency: "gold" | "diamonds"): boolean {
+  switch (currency) {
+    case "gold": {
+      return (state.gold - amountNeeded) >= 0
+    }
+    case "diamonds": {
+      return (state.diamonds - amountNeeded) >= 0
+    }
+    default: {
+      return false
+    }
+  }
+}
+
+function getBuildingCost(building: IBuilding): number {
+  return building.price * (building?.priceModifier || 1 * (state.funding[building.name] + 1))
+}
+
+function canAffordBuilding(building: IBuilding): boolean {
+  return canAfford(getBuildingCost(building), building.currency)
+}
+
+function fundBuilding(building: Building) {
+  if (canAffordBuilding(building)) {
+    state.gold -= getBuildingCost(building)
+    state.funding[building.name]++
+    building.effect(state)
+    console.log(`${building.name} is being funded`)
+  }
+}
+
+export function stopFundingBuilding(building: Building) {
+  state.funding[building.name] -= 1
+}
+
+function increaseLimit(_of: "gold" | "diamonds", _by: number) {
+  if (_of === "gold") { state.goldLimit = _by; return }
+  if (_of === "diamonds") { state.diamondLimit = _by; return}
+}
 
 
 abstract class Achievement {
@@ -145,7 +195,9 @@ function generateLoot() {
 }
 
 function updateGold() {
-  state.gold += state.goldPerSecond
+  const updatedAmount = state.gold + state.goldPerSecond
+  if (updatedAmount > state.goldLimit) { return }
+  state.gold = updatedAmount
 }
 
 function updateDiamonds() {
@@ -192,6 +244,10 @@ export function useGame() {
     canBuyMinion,
     minions,
     buildings,
+    increaseLimit,
+    fundBuilding,
+    canAffordBuilding,
+    getBuildingCost,
     ...toRefs(state)
   };
 }

@@ -1,16 +1,17 @@
 <template>
   <div v-for="building of buildings" :key="building.name">
     <b>{{ building.name }}</b>
-    <!-- <p>
-      Owned: {{ minionsOwned[minion.name] }} | Cost:
-      {{ getMinionCost(minion.name) }} gold
-    </p> -->
+    <p>
+      Funding: {{ funding[building.name] }} | Cost:
+      {{ getBuildingCost(building) }} {{ building.currency }}
+    </p>
     <button class="btn-info">Info</button>
     <button
+      v-text="building.name.includes('Temple') ? 'Sacrifice' : 'Fund'"
       class="btn-fund"
-    >
-      Fund
-    </button>
+      :disabled="!canAffordBuilding(building)"
+      @click="fundBuilding(building)"
+    ></button>
   </div>
 </template>
 
@@ -20,9 +21,25 @@ import { useGame } from "../hooks/game";
 
 export default defineComponent({
   setup() {
-    const { buildings } = useGame();
+    const {
+      buildings,
+      fundBuilding,
+      canAffordBuilding,
+      funding,
+      getBuildingCost,
+    } = useGame();
 
-    return { buildings };
+    for (const building of buildings) {
+      console.log(getBuildingCost(building));
+    }
+
+    return {
+      buildings,
+      fundBuilding,
+      canAffordBuilding,
+      getBuildingCost,
+      funding,
+    };
   },
 });
 </script>

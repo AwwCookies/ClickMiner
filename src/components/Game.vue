@@ -14,8 +14,8 @@
             Remaining Skill Points: {{ skillPoints }}
           </div>
         </div>
-        <div class="gold">Gold: {{ gold }}</div>
-        <div class="diamonds">Diamonds: {{ diamonds }}</div>
+        <div class="gold">Gold: {{ gold }} / {{ goldLimit }}</div>
+        <div class="diamonds">Diamonds: {{ diamonds }} / {{ diamondLimit }}</div>
         <br />
         <div class="stuffPerSecond">
           <p>Gold/s: {{ goldPerSecond }}</p>
@@ -61,25 +61,8 @@ export default defineComponent({
   },
   setup() {
     const { level, curExp, neededExp } = useGame();
-    const currentTab = ref("");
+    const currentTab = ref("minions");
 
-    // setTimeout(() => {
-    //   show.value = false
-    // }, 1000)
-    // setTimeout(() => {
-    //   show.value = true
-    // }, 2000)
-
-
-
-    // onMounted(() => {
-    //   const mine: HTMLDivElement = document.getElementsByClassName("cave-entrance")[0]
-    //   const goldCoinImg: HTMLImageElement = document.createElement("img")
-    //   goldCoinImg.className = "goldCoin"
-    //   goldCoinImg.style = "transform: translateX(-100%)"
-    //   goldCoinImg.src = "src/assets/images/gold_coin.png"
-    //   mine.appendChild(goldCoinImg)
-    // })
 
     const getCurrentTab = computed(() => {
       switch (currentTab.value) {
@@ -140,6 +123,7 @@ export default defineComponent({
 
 .buyables {
   border: 2px solid red;
+  overflow-y: scroll;
 }
 
 .player {
