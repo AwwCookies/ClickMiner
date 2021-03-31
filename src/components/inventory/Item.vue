@@ -19,8 +19,8 @@ import "tippy.js/dist/tippy.css";
 export default defineComponent({
   props: ["item"],
   setup() {
-    let itemRefs = [];
-    const setItemRef = (el) => {
+    let itemRefs: any = [];
+    const setItemRef = (el: any) => {
       if (el) {
         itemRefs.push(el);
       }
@@ -30,7 +30,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      itemRefs.forEach((item) => {
+      itemRefs.forEach((item: any) => {
         tippy(item, {
           allowHTML: true,
           interactive: true,
@@ -48,7 +48,8 @@ export default defineComponent({
       }
     }
 
-    function genTooltip(item): string {
+
+    function genTooltip(item: any): string {
       return `
         <h1 data-rarity="${item.getRarity()}">${item.getName()}</h1>
         <h2>${"[item type]"}</h2>
