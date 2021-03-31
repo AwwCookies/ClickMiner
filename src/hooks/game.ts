@@ -1,40 +1,11 @@
 import { ref, computed, watch, reactive, toRefs } from "vue"
 import { EventEmitter } from 'events';
+import { Chance } from "chance";
 
-type Rarity = 'common' | 'rare' | 'epic' | 'legendary'
+import { minions, getMinion } from "./minions"
 
-class Item {
-  private name: string;
-  private rarity: Rarity
-  constructor(name: string, rarity: Rarity) {
-    this.name = name
-    this.rarity = rarity
-  }
-  getName(): string {
-    return this.name
-  }
-  getRarity(): Rarity {
-    return this.rarity
-  }
-}
-
-class Inventory {
-  protected inventory: Item[]
-  private max: number
-  constructor() {
-    this.inventory = []
-    this.max = 250
-  }
-  getItems(): Item[] {
-    return this.inventory
-  }
-  addItem(item: Item): void {
-    this.inventory.push(item)
-  }
-  getMax(): number {
-    return this.max
-  }
-}
+import { Item, Rarity } from "./inventory/item"
+import { Inventory } from "./inventory/inventory"
 
 // Variables
 interface IState {
@@ -51,7 +22,8 @@ interface IState {
   magicFind: number;
   experiencePerSecond: number;
   unlockedAchievements: Array<Achievement>;
-  inventory: Inventory
+  inventory: Inventory;
+  minionsOwned: {[key: string]: number}
 }
 
 const state = reactive<IState>({
@@ -60,7 +32,7 @@ const state = reactive<IState>({
   curExp: 50,
   neededExp: 1000,
   skillPoints: 4,
-  gold: 0,
+  gold: 100000,
   diamonds: 0,
   goldPerSecond: 1,
   diamondsPerSecond: 0.5,
@@ -68,17 +40,43 @@ const state = reactive<IState>({
   magicFind: 0,
   experiencePerSecond: 250,
   unlockedAchievements: [],
-  inventory: new Inventory()
+  inventory: new Inventory(),
+  minionsOwned: {}
 })
 
-const events = new EventEmitter()
+// Populate state.minions
+for (const minion of minions) {
+  state.minionsOwned[minion.name] = 0
+}
 
-// for (let i = 0; i < 25; i++) {
-//   state.inventory.addItem(new Item("Apple", "common"))
-//   state.inventory.addItem(new Item("Pear", "rare"))
-//   state.inventory.addItem(new Item("Banana", "epic"))
-//   state.inventory.addItem(new Item("Coconut", "legendary"))
-// }
+
+/* minion utility functions */
+function buyMinion(minionName: string) {
+  const minion = getMinion(minionName)
+  if (!minion) { return }
+  if (canBuyMinion(minionName)) {
+    state.gold -= getMinionCost(minionName)
+    state.minionsOwned[minionName]++
+    state.goldPerSecond += minion.attributes.goldPerSec || 0
+    state.diamondsPerSecond += minion.attributes.diamondsPerSec || 0
+  }
+}
+
+function getMinionCost(minionName: string): number {
+  const minion = getMinion(minionName)
+  return minion.price * (minion.priceModifier * (state.minionsOwned[minion.name] + 1))
+}
+
+function canBuyMinion(minionName: string): boolean {
+  const minion = getMinion(minionName)
+  return state.gold - getMinionCost(minionName) >= 0
+}
+/* end minion utility functions */
+
+const events = new EventEmitter()
+const chance = new Chance()
+
+
 
 abstract class Achievement {
   protected events: EventEmitter;
@@ -123,8 +121,9 @@ events.on("achievement", (achievement: Achievement) => {[
 ]})
 
 function generateLoot() {
-  if (Math.floor(Math.random() * 10) != 5) {return}
-  const num = Math.floor(Math.random() * 4)
+  /* 10% chance to generate loot */
+  if (!chance.bool({likelihood: 10})) {return}
+  const num = chance.integer({min: 0, max: 3})
   switch (num) {
     case 0: {
       state.inventory.addItem(new Item("Apple", "common"))
@@ -188,6 +187,10 @@ export function useGame() {
     mineClicked,
     playTime,
     events,
+    buyMinion,
+    getMinionCost,
+    canBuyMinion,
+    minions,
     ...toRefs(state)
   };
 }

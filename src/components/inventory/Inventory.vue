@@ -28,7 +28,7 @@ export default defineComponent({
 <style scoped>
 .inventory {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
   /* grid-template-rows: repeat(3, 1fr); */
   column-gap: 0.2em;
   row-gap: 0.2em;

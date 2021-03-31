@@ -27,7 +27,17 @@
       </div>
       <div class="cave-entrance" @click="mineClicked"></div>
     </div>
-    <div class="buyables">sdfsdfsd</div>
+    <div class="buyables">
+      <div class="gamble">some gamble function here</div>
+      <div>
+        <button @click="currentTab = 'minions'">Minions</button>
+        <button>Buildings</button>
+        <button>Statistics</button>
+        <button>Achievements</button>
+        <!-- <Minions/> -->
+        <component :is="getCurrentTab"></component>
+      </div>
+    </div>
     <div class="player">
       <Inventory :inventory="inventory" name="Latest Finds"/>
     </div>
@@ -35,15 +45,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, unref, computed } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { useGame } from "../hooks/game";
 import Inventory from "./inventory/Inventory.vue"
+import Minions from "./Minions.vue"
 export default defineComponent({
   components: {
-    Inventory
+    Inventory,
+    Minions
   },
   setup() {
     const { level, curExp, neededExp } = useGame();
+    const currentTab = ref("")
+
+    const getCurrentTab = computed(() => {
+      switch (currentTab.value) {
+        case "minions": {
+          return Minions
+          break
+        }
+      }
+    })
 
     const xpbar = computed(() => {
       return `Level: ${level.value} Experience: ${curExp.value}/${neededExp.value}`;
@@ -55,6 +77,8 @@ export default defineComponent({
     });
 
     return {
+      currentTab,
+      getCurrentTab,
       xpbar,
       xpbarProgress,
       ...useGame(),
