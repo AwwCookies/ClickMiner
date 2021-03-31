@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { Chance } from "chance";
 
 import { minions, getMinion } from "./minions"
-
+import { Building, buildings } from "./buildings"
 import { Item, Rarity } from "./inventory/item"
 import { Inventory } from "./inventory/inventory"
 
@@ -191,6 +191,7 @@ export function useGame() {
     getMinionCost,
     canBuyMinion,
     minions,
+    buildings,
     ...toRefs(state)
   };
 }

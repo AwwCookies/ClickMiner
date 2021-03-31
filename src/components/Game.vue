@@ -31,7 +31,8 @@
       <div class="gamble">some gamble function here</div>
       <div>
         <button @click="currentTab = 'minions'">Minions</button>
-        <button>Buildings</button>
+        <button @click="currentTab = 'buildings'">Buildings</button>
+        <button>Upgrades</button>
         <button>Statistics</button>
         <button>Achievements</button>
         <!-- <Minions/> -->
@@ -49,10 +50,12 @@ import { defineComponent, ref, computed } from "vue";
 import { useGame } from "../hooks/game";
 import Inventory from "./inventory/Inventory.vue"
 import Minions from "./Minions.vue"
+import Buildings from "./Buildings.vue"
 export default defineComponent({
   components: {
     Inventory,
-    Minions
+    Minions,
+    Buildings
   },
   setup() {
     const { level, curExp, neededExp } = useGame();
@@ -62,7 +65,9 @@ export default defineComponent({
       switch (currentTab.value) {
         case "minions": {
           return Minions
-          break
+        }
+        case "buildings": {
+          return Buildings
         }
       }
     })
