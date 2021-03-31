@@ -1,0 +1,149 @@
+import { ref, computed, watchEffect, reactive } from "vue"
+import { EventEmitter } from 'events';
+
+// Variables
+interface IState {
+  time: number;
+  level: number;
+  curExp: number;
+  neededExp: number;
+  skillPoints: number;
+  gold: number;
+  diamonds: number;
+  goldPerSecond: number;
+  diamondsPerSecond: number;
+  clickEfficiency: number;
+  magicFind: number;
+  experiencePerSecond: number;
+  unlockedAchievements: []
+}
+
+const state = reactive<IState>({
+  time: 0,
+  level: 1,
+  curExp: 50,
+  neededExp: 1000,
+  skillPoints: 4,
+  gold: 0,
+  diamonds: 0,
+  goldPerSecond: 1,
+  diamondsPerSecond: 0.5,
+  clickEfficiency: 0,
+  magicFind: 0,
+  experiencePerSecond: 250,
+  unlockedAchievements: [] 
+})
+
+// const time = ref(0)
+// const level = ref(1);
+// const curExp = ref(50);
+// const neededExp = ref(1000);
+// const skillPoints = ref(4);
+// const gold = ref(0);
+// const diamonds = ref(0);
+// const goldPerSecond = ref(1);
+// const diamondsPerSecond = ref(0.5);
+// const clickEfficiency = ref(0);
+// const magicFind = ref(0);
+// const experiencePerSecond = ref(250);
+// const unlockedAchievements = ref<[{name: string}]>([])
+
+const events = new EventEmitter()
+
+abstract class Achievement {
+  protected events: EventEmitter;
+  protected name: string;
+  constructor(events: EventEmitter, name: string) {
+    this.events = events
+    this.name = name
+  }
+  getName(): string {
+    return this.name
+  }
+}
+
+class LevelTenAchievement extends Achievement {
+  constructor(events: EventEmitter) {
+    super(events, "Reached Level 10")
+    events.on("level up", (level) => {
+      if (level == 10) {
+        events.emit("achievement", this)
+      }
+    })
+  }
+}
+
+new LevelTenAchievement(events)
+
+// Game Tick
+setInterval(() => {
+  events.emit('tick')
+}, 500)
+
+events.on('tick', () => {
+  state.time+= 0.5
+  updateGold()
+  updateDiamonds()
+  updateExperience()
+})
+
+events.on("achievement", (achievement: Achievement) => {[
+  console.log(`You've earned ${achievement.getName()}`)
+]})
+
+function updateGold() {
+  state.gold += state.goldPerSecond
+}
+
+function updateDiamonds() {
+  state.diamonds += state.diamondsPerSecond
+}
+
+function updateExperience() {
+  function nextLevel() {
+    const exponent = 1.5
+    const baseXP = 1000
+    return Math.floor(baseXP * ((state.level + 1) ^ exponent))
+  }
+  if (state.curExp + state.experiencePerSecond > state.neededExp) {
+    state.neededExp = nextLevel()
+    state.curExp = 0
+    state.level++
+    events.emit("level up", state.level)
+    return
+  }
+  state.curExp += state.experiencePerSecond
+}
+
+function mineClicked() {
+  state.gold++
+  state.curExp += 1000
+}
+
+// Computed
+const playTime = computed(() => {
+  const hours = `${Math.floor(state.time/3600)}`.padStart(2, '0')
+  const mins = `${Math.floor(state.time/60%60)}`.padStart(2, '0')
+  const secs = `${Math.floor(state.time % 60)}`.padStart(2, '0')
+  return `${hours}:${mins}:${secs}`
+})
+
+
+export function useGame() {
+  return {
+    time,
+    playTime,
+    level,
+    curExp,
+    neededExp,
+    skillPoints,
+    gold,
+    diamonds,
+    goldPerSecond,
+    diamondsPerSecond,
+    clickEfficiency,
+    magicFind,
+    experiencePerSecond,
+    mineClicked,
+  };
+}
