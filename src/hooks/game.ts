@@ -1,13 +1,27 @@
 import { ref, computed, watch, reactive, toRefs } from "vue"
 import { EventEmitter } from 'events';
+import TypedEmitter from "typed-emitter"
 import { Chance } from "chance";
 
 import { minions, getMinion } from "./minions"
 import { Building, IBuilding, buildings, School, Temple, getBuilding } from "./buildings"
 import { Item, Rarity } from "./inventory/item"
 import { Inventory } from "./inventory/inventory"
+import { registerAchievements, Achievement } from '../hooks/achievements'
 
 // Variables
+export interface GameEvents {
+  tick: () => void;
+  achievement: (achievement: Achievement) => void;
+  "level up": (level: number) => void;
+}
+
+const events = new EventEmitter() as TypedEmitter<GameEvents>
+events.setMaxListeners(100)
+const chance = new Chance()
+
+const achievements = registerAchievements(events)
+
 export interface IState {
   time: number;
   level: number;
@@ -84,8 +98,8 @@ function canBuyMinion(minionName: string): boolean {
 }
 /* end minion utility functions */
 
-const events = new EventEmitter()
-const chance = new Chance()
+
+
 
 function canAfford(amountNeeded: number, currency: "gold" | "diamonds"): boolean {
   switch (currency) {
@@ -129,30 +143,7 @@ function increaseLimit(_of: "gold" | "diamonds", _by: number) {
 }
 
 
-abstract class Achievement {
-  protected events: EventEmitter;
-  protected name: string;
-  constructor(events: EventEmitter, name: string) {
-    this.events = events
-    this.name = name
-  }
-  getName(): string {
-    return this.name
-  }
-}
 
-class LevelTenAchievement extends Achievement {
-  constructor(events: EventEmitter) {
-    super(events, "Reached Level 10")
-    events.on("level up", (level) => {
-      if (level == 10) {
-        events.emit("achievement", this)
-      }
-    })
-  }
-}
-
-new LevelTenAchievement(events)
 
 // Game Tick
 setInterval(() => {
@@ -197,7 +188,7 @@ function generateLoot() {
 
 function updateGold() {
   const updatedAmount = state.gold + state.goldPerSecond
-  if (updatedAmount > state.goldLimit) { return }
+  if (updatedAmount > state.goldLimit) { state.gold = state.goldLimit; return }
   state.gold = updatedAmount
 }
 
@@ -249,6 +240,7 @@ export function useGame() {
     fundBuilding,
     canAffordBuilding,
     getBuildingCost,
+    achievements,
     ...toRefs(state)
   };
 }

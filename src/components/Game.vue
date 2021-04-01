@@ -11,18 +11,18 @@
         </div>
         <div class="skills">
           <div class="skill-points">
-            Remaining Skill Points: {{ skillPoints }}
+            Remaining Skill Points: {{ formatNumber(skillPoints) }}
           </div>
         </div>
-        <div class="gold">Gold: {{ gold }} / {{ goldLimit }}</div>
+        <div class="gold">Gold: {{ formatNumber(gold) }} / {{ formatNumber(goldLimit) }}</div>
         <div class="diamonds">Diamonds: {{ diamonds }} / {{ diamondLimit }}</div>
         <br />
         <div class="stuffPerSecond">
-          <p>Gold/s: {{ goldPerSecond }}</p>
-          <p>Diamonds/s: {{ diamondsPerSecond }}</p>
-          <p>Click Efficiency: {{ clickEfficiency }}</p>
-          <p>Magic find/s: {{ magicFind }}</p>
-          <p>Experience/s: {{ experiencePerSecond }}</p>
+          <p>Gold/s: {{ formatNumber(goldPerSecond) }}</p>
+          <p>Diamonds/s: {{ formatNumber(diamondsPerSecond) }}</p>
+          <p>Click Efficiency: {{ formatNumber(clickEfficiency) }}</p>
+          <p>Magic find/s: {{ formatNumber(magicFind) }}</p>
+          <p>Experience/s: {{ formatNumber(experiencePerSecond) }}</p>
         </div>
       </div>
       <CaveEntrance/>
@@ -34,7 +34,7 @@
         <button @click="currentTab = 'buildings'">Buildings</button>
         <button>Upgrades</button>
         <button>Statistics</button>
-        <button>Achievements</button>
+        <button @click="currentTab = 'achievements'">Achievements</button>
         <!-- <Minions/> -->
         <component :is="getCurrentTab"></component>
       </div>
@@ -52,6 +52,8 @@ import Inventory from "./inventory/Inventory.vue";
 import Minions from "./Minions.vue";
 import Buildings from "./Buildings.vue";
 import CaveEntrance from "./CaveEntrance.vue"
+import Achievements from "./Achievements.vue"
+import { formatNumber } from "../hooks/utilities"
 export default defineComponent({
   components: {
     Inventory,
@@ -72,6 +74,9 @@ export default defineComponent({
         case "buildings": {
           return Buildings;
         }
+        case "achievements": {
+          return Achievements;
+        }
       }
     });
 
@@ -89,6 +94,7 @@ export default defineComponent({
       getCurrentTab,
       xpbar,
       xpbarProgress,
+      formatNumber,
       ...useGame(),
     };
   },

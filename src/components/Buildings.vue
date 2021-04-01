@@ -3,7 +3,7 @@
     <b>{{ building.name }}</b>
     <p>
       Funding: {{ funding[building.name] }} | Cost:
-      {{ getBuildingCost(building) }} {{ building.currency }}
+      {{ formatNumber(getBuildingCost(building)) }} {{ building.currency }}
     </p>
     <button class="btn-info">Info</button>
     <button
@@ -18,7 +18,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useGame } from "../hooks/game";
-
+import { formatNumber } from "../hooks/utilities"
 export default defineComponent({
   setup() {
     const {
@@ -39,6 +39,7 @@ export default defineComponent({
       canAffordBuilding,
       getBuildingCost,
       funding,
+      formatNumber,
     };
   },
 });
