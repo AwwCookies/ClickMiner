@@ -20,7 +20,7 @@ const events = new EventEmitter() as TypedEmitter<GameEvents>
 events.setMaxListeners(100)
 const chance = new Chance()
 
-const achievements = registerAchievements(events)
+
 
 export interface IState {
   time: number;
@@ -39,8 +39,9 @@ export interface IState {
   experiencePerSecond: number;
   unlockedAchievements: Array<Achievement>;
   inventory: Inventory;
-  minionsOwned: {[key: string]: number}
-  funding: {[key: string]: number}
+  minionsOwned: {[key: string]: number};
+  funding: {[key: string]: number};
+  earnedAchievements: string[];
 }
 
 const state = reactive<IState>({
@@ -61,8 +62,11 @@ const state = reactive<IState>({
   unlockedAchievements: [],
   inventory: new Inventory(),
   minionsOwned: {},
-  funding: {}
+  funding: {},
+  earnedAchievements: []
 })
+
+const achievements = registerAchievements(state, events)
 
 // Populate state.minions
 for (const minion of minions) {

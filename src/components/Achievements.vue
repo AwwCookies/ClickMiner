@@ -1,18 +1,16 @@
 <template>
-  <div v-for="achievement of achievements" :key="achievement.name">
-    {{ achievement.name }} | 
-    {{ achievement.isCompleted() ? '✅' : '❌'}}
+  <div v-for="achievement of achievements" :key="achievement">
+    {{ achievement }}
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useGame } from "../hooks/game";
 export default defineComponent({
   setup() {
-    const { achievements } = useGame();
-
-    return { achievements };
+    const { earnedAchievements, events } = useGame();
+    return { achievements: earnedAchievements };
   },
 });
 </script>

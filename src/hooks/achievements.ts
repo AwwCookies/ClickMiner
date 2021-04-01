@@ -1,14 +1,16 @@
 import TypedEmitter from 'typed-emitter';
-import { GameEvents } from "./game"
+import { GameEvents, IState } from "./game"
 
 
 
 export class Achievement {
   protected events: TypedEmitter<GameEvents>;
+  protected state: IState;
   protected name: string;
-  protected completed: boolean
-  constructor(events: TypedEmitter<GameEvents>, name: string) {
+  public completed: boolean
+  constructor(state: IState, events: TypedEmitter<GameEvents>, name: string) {
     this.events = events
+    this.state = state
     this.name = name
     this.completed = false
   }
@@ -19,22 +21,24 @@ export class Achievement {
     return this.completed
   }
 }
-const achievements: any = []
+const achievements: Achievement[] = []
 
 class LevelAchievement extends Achievement {
-  constructor(events: TypedEmitter<GameEvents>, _level: number) {
-    super(events, `Reached Level ${_level}`)
+  constructor(state: IState, events: TypedEmitter<GameEvents>, _level: number) {
+    super(state, events, `Reached Level ${_level}`)
     events.on("level up", (level) => {
       if (level == _level) {
+        this.completed = true
+        this.state.earnedAchievements.push(this.getName())
         events.emit("achievement", this)
       }
     })
   }
 }
 
-export function registerAchievements(events: TypedEmitter<GameEvents>) {
+export function registerAchievements(state: IState, events: TypedEmitter<GameEvents>) {
   for (let i = 10; i <= 100; i += 10) {
-    achievements.push(new LevelAchievement(events, i))
+    achievements.push(new LevelAchievement(state, events, i))
   }
   return achievements
 }
