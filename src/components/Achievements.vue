@@ -1,6 +1,7 @@
 <template>
-  <div>
-    {{ achievements }}
+  <div v-for="achievement of achievements" :key="achievement.name">
+    {{ achievement.name }} | 
+    {{ achievement.isCompleted() ? '✅' : '❌'}}
   </div>
 </template>
 

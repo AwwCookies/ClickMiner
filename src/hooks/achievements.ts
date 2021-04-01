@@ -6,12 +6,17 @@ import { GameEvents } from "./game"
 export class Achievement {
   protected events: TypedEmitter<GameEvents>;
   protected name: string;
+  protected completed: boolean
   constructor(events: TypedEmitter<GameEvents>, name: string) {
     this.events = events
     this.name = name
+    this.completed = false
   }
   getName(): string {
     return this.name
+  }
+  isCompleted(): boolean {
+    return this.completed
   }
 }
 const achievements: any = []
