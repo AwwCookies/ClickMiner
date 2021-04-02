@@ -124,7 +124,7 @@ export default defineComponent({
 }
 
 .cave-entrance {
-  background-image: url("http://pixelartmaker.com/art/1ce310b0b7af71f.png");
+  background-image: url("/src/assets/images/mine.png");
   background-position: center;
   background-size: cover;
   border: 2px solid brown;
