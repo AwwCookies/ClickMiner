@@ -39,6 +39,7 @@ export interface IState {
   experiencePerSecond: number;
   unlockedAchievements: Array<Achievement>;
   inventory: Inventory;
+  finds: Inventory;
   minionsOwned: {[key: string]: number};
   funding: {[key: string]: number};
   earnedAchievements: string[];
@@ -61,6 +62,7 @@ const state = reactive<IState>({
   experiencePerSecond: 250,
   unlockedAchievements: [],
   inventory: new Inventory(),
+  finds: new Inventory(),
   minionsOwned: {},
   funding: {},
   earnedAchievements: []
@@ -172,19 +174,19 @@ function generateLoot() {
   const num = chance.integer({min: 0, max: 3})
   switch (num) {
     case 0: {
-      state.inventory.addItem(new Item("Apple", "common"))
+      state.finds.addItem(new Item("Apple", "common"))
       break;
     }
     case 1: {
-      state.inventory.addItem(new Item("Apple", "rare"))
+      state.finds.addItem(new Item("Apple", "rare"))
       break;
     }
     case 2: {
-      state.inventory.addItem(new Item("Apple", "epic"))
+      state.finds.addItem(new Item("Apple", "epic"))
       break;
     }
     case 3: {
-      state.inventory.addItem(new Item("Apple", "legendary"))
+      state.finds.addItem(new Item("Apple", "legendary"))
       break;
     }
   }

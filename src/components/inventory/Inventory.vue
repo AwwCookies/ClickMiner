@@ -2,9 +2,11 @@
   <h1>
     {{ name }}: ({{ inventory.getItems().length }}/{{ inventory.getMax() }})
   </h1>
+  <label>Search: </label>
+  <input type="text" v-model="nameFilter" />
   <div class="inventory">
     <Item
-      v-for="item in inventory.getItems()"
+      v-for="item in filteredInventory"
       :key="item.getName()"
       :item="item"
     />
@@ -12,15 +14,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import Item from "./Item.vue";
+import { Inventory } from "../../hooks/inventory/inventory"
+import { Rarity } from "../../hooks/inventory/item"
+
 export default defineComponent({
   props: ["inventory", "name"],
   components: {
     Item,
   },
   setup(props) {
-    const inventory = props.inventory;
+    const nameFilter = ref("")
+    const rarityFilter = ref<Rarity | "">("")
+    const inventory: Inventory = props.inventory;
+
+    const filteredInventory = computed(() => {
+      return inventory.getItemsFiltered({
+        name: nameFilter.value,
+        rarity: rarityFilter.value
+      })
+    })
+
+    return { nameFilter, filteredInventory }
   },
 });
 </script>
@@ -32,6 +48,7 @@ export default defineComponent({
   /* grid-template-rows: repeat(3, 1fr); */
   column-gap: 0.2em;
   row-gap: 0.2em;
+  min-height: 10em;
   max-height: 10em;
   overflow-y: scroll;
 }

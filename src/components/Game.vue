@@ -40,7 +40,8 @@
       </div>
     </div>
     <div class="player">
-      <Inventory :inventory="inventory" name="Latest Finds" />
+      <Inventory :inventory="finds" name="Latest Find" />
+      <Inventory :inventory="inventory" name="Inventory" />
     </div>
   </div>
 </template>
