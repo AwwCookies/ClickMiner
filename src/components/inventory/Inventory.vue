@@ -20,6 +20,7 @@
     <option>Junk</option>
   </select>
   <p/>
+  <button @click="sort">Sort</button>
   <div class="inventory">
     <Item
       v-for="item in filteredInventory"
@@ -54,7 +55,11 @@ export default defineComponent({
       })
     })
 
-    return { nameFilter, rarityFilter, typeFilter, filteredInventory }
+    function sort() {
+      inventory.sort("rarity")
+    }
+
+    return { sort, nameFilter, rarityFilter, typeFilter, filteredInventory }
   },
 });
 </script>

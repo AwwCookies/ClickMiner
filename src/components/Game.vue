@@ -14,8 +14,12 @@
             Remaining Skill Points: {{ formatNumber(skillPoints) }}
           </div>
         </div>
-        <div class="gold">Gold: {{ formatNumber(gold) }} / {{ formatNumber(goldLimit) }}</div>
-        <div class="diamonds">Diamonds: {{ diamonds }} / {{ diamondLimit }}</div>
+        <div class="gold">
+          Gold: {{ formatNumber(gold) }} / {{ formatNumber(goldLimit) }}
+        </div>
+        <div class="diamonds">
+          Diamonds: {{ diamonds }} / {{ diamondLimit }}
+        </div>
         <br />
         <div class="stuffPerSecond">
           <p>Gold/s: {{ formatNumber(goldPerSecond) }}</p>
@@ -25,7 +29,7 @@
           <p>Experience/s: {{ formatNumber(experiencePerSecond) }}</p>
         </div>
       </div>
-      <CaveEntrance/>
+      <CaveEntrance />
     </div>
     <div class="buyables">
       <div class="gamble">some gamble function here</div>
@@ -52,20 +56,19 @@ import { useGame } from "../hooks/game";
 import Inventory from "./inventory/Inventory.vue";
 import Minions from "./Minions.vue";
 import Buildings from "./Buildings.vue";
-import CaveEntrance from "./CaveEntrance.vue"
-import Achievements from "./Achievements.vue"
-import { formatNumber } from "../hooks/utilities"
+import CaveEntrance from "./CaveEntrance.vue";
+import Achievements from "./Achievements.vue";
+import { formatNumber } from "../hooks/utilities";
 export default defineComponent({
   components: {
     Inventory,
     Minions,
     Buildings,
-    CaveEntrance
+    CaveEntrance,
   },
   setup() {
     const { level, curExp, neededExp } = useGame();
     const currentTab = ref("minions");
-
 
     const getCurrentTab = computed(() => {
       switch (currentTab.value) {
@@ -82,7 +85,9 @@ export default defineComponent({
     });
 
     const xpbar = computed(() => {
-      return `Level: ${level.value} Experience: ${curExp.value}/${neededExp.value}`;
+      return `Level: ${level.value} Experience: ${formatNumber(
+        curExp.value
+      )}/${formatNumber(neededExp.value)}`;
     });
 
     const xpbarProgress = computed(() => {
@@ -103,8 +108,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-
 .game {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -45,4 +45,46 @@ export class Inventory {
   getMax(): number {
     return this.max
   }
+
+  sort(by: "name" | "type" | "rarity") {
+    switch (by) {
+      case "name": {
+        this.inventory.sort((a, b) => {
+          const nameA = a.getName().toLowerCase()
+          const nameB = b.getName().toLowerCase()
+          if (nameA < nameB) {
+            return - 1
+          } else {
+            return 1
+          }
+          return 0
+        })
+      }
+      case "rarity": {
+        this.inventory.sort((a, b) => {
+          const nameA = a.getRarity().toLowerCase()
+          const nameB = b.getRarity().toLowerCase()
+          if (nameA < nameB) {
+            return - 1
+          } else {
+            return 1
+          }
+          return 0
+        })
+      }
+      case "type": {
+        this.inventory.sort((a, b) => {
+          const nameA = a.getType().toLowerCase()
+          const nameB = b.getType().toLowerCase()
+          if (nameA < nameB) {
+            return - 1
+          } else {
+            return 1
+          }
+          return 0
+        })
+      }
+    }
+  } /* end of sort function */
+  
 }

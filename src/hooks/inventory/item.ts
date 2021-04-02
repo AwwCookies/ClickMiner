@@ -5,11 +5,17 @@ export class Item {
   private rarity: Rarity
   private sellPrice: number
   private type: ItemType
-  constructor(name: string, rarity: Rarity, sellPrice: number = 0, type: ItemType = "junk") {
+  private description: string
+  constructor(
+    name: string, rarity: Rarity,
+    sellPrice: number = 0, type: ItemType = "junk",
+    description: string = "No Description"
+    ) {
     this.name = name
     this.rarity = rarity
     this.sellPrice = sellPrice
     this.type = type
+    this.description = description
   }
   getName(): string {
     return this.name
@@ -22,5 +28,8 @@ export class Item {
   }
   getType(): ItemType {
     return this.type
+  }
+  getDescription(): string {
+    return this.description
   }
 }
