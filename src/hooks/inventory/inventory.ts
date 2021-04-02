@@ -1,8 +1,9 @@
-import { Item, Rarity } from "./item"
+import { Item, Rarity, ItemType } from "./item"
 
 export interface IInventoryFilterOptions {
-  name: string;
-  rarity: Rarity | ""
+  name?: string;
+  rarity?: Rarity | "";
+  type?: ItemType | ""
 }
 
 export class Inventory {
@@ -17,16 +18,21 @@ export class Inventory {
     return this.inventory
   }
 
-  getItemsFiltered({name, rarity}: IInventoryFilterOptions): Item[] {
+  getItemsFiltered({name, rarity, type}: IInventoryFilterOptions): Item[] {
     let items = this.inventory
-    if (name?.length > 0) {
+    if (name && name.length > 0) {
       items = items.filter((item: Item) => {
         return item.getName().toLowerCase().includes(name.toLowerCase())
       })
     }
-    if (rarity?.length > 0) {
+    if (rarity && rarity.length > 0) {
       items = items.filter((item: Item) => {
         return item.getRarity().toLowerCase().includes(rarity.toLowerCase())
+      })
+    }
+    if (type && type.length > 0) {
+      items = items.filter((item: Item) => {
+        return item.getType().toLowerCase().includes(type.toLowerCase())
       })
     }
     return items

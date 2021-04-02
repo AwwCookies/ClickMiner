@@ -12,6 +12,13 @@
     <option style="color: purple;">Epic</option>
     <option style="color: orangered;">Legendary</option>
   </select>
+  <label>Type: </label>
+  <select v-model="typeFilter">
+    <option value="">All</option>
+    <option>Potion</option>
+    <option>Gem</option>
+    <option>Junk</option>
+  </select>
   <p/>
   <div class="inventory">
     <Item
@@ -26,7 +33,7 @@
 import { defineComponent, computed, ref } from "vue";
 import Item from "./Item.vue";
 import { Inventory } from "../../hooks/inventory/inventory"
-import { Rarity } from "../../hooks/inventory/item"
+import { ItemType, Rarity } from "../../hooks/inventory/item"
 
 export default defineComponent({
   props: ["inventory", "name"],
@@ -36,16 +43,18 @@ export default defineComponent({
   setup(props) {
     const nameFilter = ref("")
     const rarityFilter = ref<Rarity | "">("")
+    const typeFilter = ref<ItemType | "">("")
     const inventory: Inventory = props.inventory;
 
     const filteredInventory = computed(() => {
       return inventory.getItemsFiltered({
         name: nameFilter.value,
-        rarity: rarityFilter.value
+        rarity: rarityFilter.value,
+        type: typeFilter.value
       })
     })
 
-    return { nameFilter, rarityFilter, filteredInventory }
+    return { nameFilter, rarityFilter, typeFilter, filteredInventory }
   },
 });
 </script>

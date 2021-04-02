@@ -52,7 +52,7 @@ export default defineComponent({
     function genTooltip(item: any): string {
       return `
         <h1 data-rarity="${item.getRarity()}">${item.getName()}</h1>
-        <h2>${"[item type]"}</h2>
+        <h2>${item.getType()}</h2>
         <h3>${"Selling Price: 2g"}</h3>
         <p>た課派れおよそんレレハウゅろ課遊目素都根舳派おスノヨハ、
         舳雲以擢目鵜つ離夜阿手かいこす無やつめイキフハいっぬぬよょ
