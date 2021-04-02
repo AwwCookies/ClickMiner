@@ -37,6 +37,7 @@ export default defineComponent({
         tippy(item, {
           allowHTML: true,
           interactive: true,
+          delay: 100
         });
       });
     });
@@ -45,8 +46,8 @@ export default defineComponent({
 
     function getItemImage(itemName: string) {
       switch (itemName) {
-        case "Apple": {
-          return "https://wp-dreams.com/goldenminer/css/images/pickaxe.png";
+        default: {
+          return "/src/assets/images/unid.png"
         }
       }
     }
