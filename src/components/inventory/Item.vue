@@ -18,6 +18,9 @@ import { defineComponent, onMounted, onBeforeUpdate, onUpdated } from "vue";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import { useGame } from "../../hooks/game"
+
+import unidImgUrl from "../../assets/images/unid.png"
+
 export default defineComponent({
   props: ["item"],
   setup() {
@@ -47,7 +50,7 @@ export default defineComponent({
     function getItemImage(itemName: string) {
       switch (itemName) {
         default: {
-          return "/src/assets/images/unid.png"
+          return unidImgUrl
         }
       }
     }
