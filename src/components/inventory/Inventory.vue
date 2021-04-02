@@ -7,10 +7,10 @@
   <label>Rarity: </label>
   <select v-model="rarityFilter">
     <option value="">All</option>
-    <option>Common</option>
-    <option>Rare</option>
-    <option>Epic</option>
-    <option>Legendary</option>
+    <option style="color: gray;">Common</option>
+    <option style="color: blue;">Rare</option>
+    <option style="color: purple;">Epic</option>
+    <option style="color: orangered;">Legendary</option>
   </select>
   <div class="inventory">
     <Item

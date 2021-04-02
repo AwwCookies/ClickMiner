@@ -86,7 +86,7 @@ export default defineComponent({
   border-color: blue;
 }
 [data-rarity="epic"] {
-  border-color: goldenrod;
+  border-color: purple;
 }
 [data-rarity="legendary"] {
   border-color: orangered;
