@@ -1,5 +1,6 @@
 <template>
   <div
+    @dblclick="transferToInventory(item)"
     class="item"
     :ref="setItemRef"
     :data-tippy-content="genTooltip(item)"
@@ -11,14 +12,16 @@
 </template>
 
 <script lang="ts">
+
 import { defineComponent, onMounted, onBeforeUpdate, onUpdated } from "vue";
 // import { useTippy } from "vue-tippy/composition";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
-
+import { useGame } from "../../hooks/game"
 export default defineComponent({
   props: ["item"],
   setup() {
+    const { inventory, finds } = useGame()
     let itemRefs: any = [];
     const setItemRef = (el: any) => {
       if (el) {
@@ -62,10 +65,16 @@ export default defineComponent({
       `;
     }
 
+    function transferToInventory(item: any) {
+      finds.value.removeItem(item)
+      inventory.value.addItem(item)
+    }
+
     return {
       getItemImage,
       setItemRef,
       genTooltip,
+      transferToInventory,
     };
   },
 });

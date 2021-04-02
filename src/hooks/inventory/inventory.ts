@@ -13,12 +13,12 @@ export class Inventory {
     this.inventory = []
     this.max = 250
   }
-  
+
   getItems(): Item[] {
     return this.inventory
   }
 
-  getItemsFiltered({name, rarity, type}: IInventoryFilterOptions): Item[] {
+  getItemsFiltered({ name, rarity, type }: IInventoryFilterOptions): Item[] {
     let items = this.inventory
     if (name && name.length > 0) {
       items = items.filter((item: Item) => {
@@ -37,11 +37,18 @@ export class Inventory {
     }
     return items
   }
-  
+
   addItem(item: Item): void {
     this.inventory.push(item)
   }
-  
+
+  removeItem(item: any): void {
+    const index = this.inventory.indexOf(item);
+    if (index > -1) {
+      this.inventory.splice(index, 1);
+    }
+  }
+
   getMax(): number {
     return this.max
   }
@@ -86,5 +93,5 @@ export class Inventory {
       }
     }
   } /* end of sort function */
-  
+
 }
