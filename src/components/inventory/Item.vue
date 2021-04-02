@@ -19,7 +19,7 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import { useGame } from "../../hooks/game"
 
-import unidImgUrl from "../../assets/images/unid.png"
+import { images } from "../../images"
 
 export default defineComponent({
   props: ["item"],
@@ -50,7 +50,7 @@ export default defineComponent({
     function getItemImage(itemName: string) {
       switch (itemName) {
         default: {
-          return unidImgUrl
+          return images.unknown
         }
       }
     }
