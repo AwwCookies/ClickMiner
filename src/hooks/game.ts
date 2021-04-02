@@ -37,7 +37,6 @@ export interface IState {
   clickEfficiency: number;
   magicFind: number;
   experiencePerSecond: number;
-  unlockedAchievements: Array<Achievement>;
   inventory: Inventory;
   finds: Inventory;
   minionsOwned: {[key: string]: number};
@@ -60,7 +59,6 @@ const state = reactive<IState>({
   clickEfficiency: 0,
   magicFind: 0,
   experiencePerSecond: 250,
-  unlockedAchievements: [],
   inventory: new Inventory(),
   finds: new Inventory(),
   minionsOwned: {},
@@ -68,6 +66,7 @@ const state = reactive<IState>({
   earnedAchievements: []
 })
 
+// @ts-ignore
 const achievements = registerAchievements(state, events)
 
 // Populate state.minions

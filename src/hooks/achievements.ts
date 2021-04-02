@@ -36,9 +36,21 @@ class LevelAchievement extends Achievement {
   }
 }
 
+class FirstAchievement extends Achievement {
+  constructor(state: IState, events: TypedEmitter<GameEvents>) {
+    super(state, events, "Your first Achievement! Here's another!")
+    events.once("achievement", () => {
+      this.completed = true
+      this.state.earnedAchievements.push(this.getName())
+      events.emit("achievement", this)
+    })
+  }
+}
+
 export function registerAchievements(state: IState, events: TypedEmitter<GameEvents>) {
   for (let i = 10; i <= 100; i += 10) {
     achievements.push(new LevelAchievement(state, events, i))
   }
+  achievements.push(new FirstAchievement(state, events))
   return achievements
 }

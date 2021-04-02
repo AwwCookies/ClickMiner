@@ -4,6 +4,14 @@
   </h1>
   <label>Search: </label>
   <input type="text" v-model="nameFilter" />
+  <label>Rarity: </label>
+  <select v-model="rarityFilter">
+    <option value="">All</option>
+    <option>Common</option>
+    <option>Rare</option>
+    <option>Epic</option>
+    <option>Legendary</option>
+  </select>
   <div class="inventory">
     <Item
       v-for="item in filteredInventory"
@@ -36,7 +44,7 @@ export default defineComponent({
       })
     })
 
-    return { nameFilter, filteredInventory }
+    return { nameFilter, rarityFilter, filteredInventory }
   },
 });
 </script>
