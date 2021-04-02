@@ -12,6 +12,7 @@
     <option style="color: purple;">Epic</option>
     <option style="color: orangered;">Legendary</option>
   </select>
+  <p/>
   <div class="inventory">
     <Item
       v-for="item in filteredInventory"
