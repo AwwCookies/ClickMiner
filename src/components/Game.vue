@@ -1,5 +1,6 @@
 <template>
   <h1>Click Miner</h1>
+  <button @click="paused = !paused">{{ paused ? "Start" : "Stop" }}</button>
   <div class="game">
     <div class="mine">
       <div class="numbers">

@@ -42,6 +42,7 @@ export interface IState {
   minionsOwned: {[key: string]: number};
   funding: {[key: string]: number};
   earnedAchievements: string[];
+  paused: boolean;
 }
 
 const state = reactive<IState>({
@@ -63,7 +64,8 @@ const state = reactive<IState>({
   finds: new Inventory(),
   minionsOwned: {},
   funding: {},
-  earnedAchievements: []
+  earnedAchievements: [],
+  paused: false
 })
 
 // @ts-ignore
@@ -152,7 +154,9 @@ function increaseLimit(_of: "gold" | "diamonds", _by: number) {
 
 // Game Tick
 setInterval(() => {
-  events.emit('tick')
+  if (!state.paused) {
+    events.emit('tick')
+  }
 }, 500)
 
 events.on('tick', () => {
@@ -217,11 +221,12 @@ function updateExperience() {
   state.curExp += state.experiencePerSecond
 }
 
+// UI Function
+// Needs to be removed and implemented in Game.vue
 function mineClicked() {
   state.gold++
   state.curExp += 1000
 }
-
 // Computed
 const playTime = computed(() => {
   const hours = `${Math.floor(state.time/3600)}`.padStart(2, '0')
