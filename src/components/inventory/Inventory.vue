@@ -69,10 +69,11 @@ export default defineComponent({
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
   /* grid-template-rows: repeat(3, 1fr); */
-  column-gap: 0.2em;
-  row-gap: 0.2em;
+  /* column-gap: 0.2em;
+  row-gap: 0.2em; */
   min-height: 10em;
   max-height: 10em;
   overflow-y: scroll;
+  background-color: rgb(35, 37, 39);
 }
 </style>

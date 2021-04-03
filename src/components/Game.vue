@@ -37,7 +37,7 @@
       <div>
         <button @click="currentTab = 'minions'">Minions</button>
         <button @click="currentTab = 'buildings'">Buildings</button>
-        <button>Upgrades</button>
+        <button @click="currentTab = 'upgrades'">Upgrades</button>
         <button>Statistics</button>
         <button @click="currentTab = 'achievements'">Achievements</button>
         <!-- <Minions/> -->
@@ -59,6 +59,7 @@ import Minions from "./Minions.vue";
 import Buildings from "./Buildings.vue";
 import CaveEntrance from "./CaveEntrance.vue";
 import Achievements from "./Achievements.vue";
+import Upgrades from "./Upgrades.vue"
 import { formatNumber } from "../hooks/utilities";
 export default defineComponent({
   components: {
@@ -66,6 +67,7 @@ export default defineComponent({
     Minions,
     Buildings,
     CaveEntrance,
+    Upgrades
   },
   setup() {
     const { level, curExp, neededExp } = useGame();
@@ -81,6 +83,9 @@ export default defineComponent({
         }
         case "achievements": {
           return Achievements;
+        }
+        case "upgrades": {
+          return Upgrades
         }
       }
     });

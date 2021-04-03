@@ -68,7 +68,7 @@ export default defineComponent({
         </p>
       `;
     }
-
+    //TODO: Move to inventory.vue to fix duplcation
     function transferToInventory(item: any) {
       finds.value.removeItem(item)
       inventory.value.addItem(item)
@@ -91,6 +91,7 @@ export default defineComponent({
   border: 2px solid blueviolet;
   width: 30px;
   height: 30px;
+  margin: 12px;
 }
 [data-rarity="common"] {
   border-color: gray;
