@@ -91,7 +91,6 @@ export default defineComponent({
   border: 2px solid blueviolet;
   width: 30px;
   height: 30px;
-  margin: 12px;
 }
 [data-rarity="common"] {
   border-color: gray;
