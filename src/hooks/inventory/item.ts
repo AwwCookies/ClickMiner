@@ -1,14 +1,6 @@
 export type Rarity = 'common' | 'rare' | 'epic' | 'legendary'
 export type ItemType = 'potion' | 'gem' | "equipment" | "junk"
 
-export interface IItemOptions {
-  readonly name: string;
-  readonly rarity: Rarity;
-  readonly sellPrice: number;
-  readonly type: ItemType;
-  readonly description: string;
-}
-
 export class Item {
   private name: string;
   private rarity: Rarity

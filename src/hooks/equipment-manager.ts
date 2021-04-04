@@ -1,8 +1,15 @@
+import { Equipment } from "./equipment"
 class EquipmentManager {
-  private slots: {[key: string]: {}}
+  private slots: {[key: string]: Equipment | null}
   constructor() {
     this.slots = {
-      head: {}
+      head: null,
+      ring: null,
+      tool: null,
+      amulet: null
     }
+  }
+  equip(slot: "head" | "ring" | "tool" | "amulet") {
+    
   }
 }

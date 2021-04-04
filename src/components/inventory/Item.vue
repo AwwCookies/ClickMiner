@@ -50,7 +50,7 @@ export default defineComponent({
     function getItemImage(itemName: string) {
       switch (itemName) {
         default: {
-          return images.unknown
+          return images.unid
         }
       }
     }
