@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 import TypedEmitter from "typed-emitter"
 import { Chance } from "chance";
 
+import { Currency } from "./global-types"
 import { minions, getMinion } from "./minions"
 import { Building, IBuilding, buildings, School, Temple, getBuilding } from "./buildings"
 import { Item, Rarity } from "./inventory/item"
@@ -108,7 +109,7 @@ function canBuyMinion(minionName: string): boolean {
 
 
 
-function canAfford(amountNeeded: number, currency: "gold" | "diamonds"): boolean {
+function canAfford(amountNeeded: number, currency: Currency): boolean {
   switch (currency) {
     case "gold": {
       return (state.gold - amountNeeded) >= 0
@@ -144,7 +145,7 @@ export function stopFundingBuilding(building: Building) {
   state.funding[building.name] -= 1
 }
 
-function increaseLimit(_of: "gold" | "diamonds", _by: number) {
+function increaseLimit(_of: Currency, _by: number) {
   if (_of === "gold") { state.goldLimit = _by; return }
   if (_of === "diamonds") { state.diamondLimit = _by; return}
 }
