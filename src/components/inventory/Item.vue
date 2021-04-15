@@ -70,6 +70,8 @@ export default defineComponent({
     }
     //TODO: Move to inventory.vue to fix duplcation
     function transferToInventory(item: any) {
+      // prevent duplication by ensure the item is in the finds inventory
+      if (item.inventory && item.inventory.name != "finds") { return }
       finds.value.removeItem(item)
       inventory.value.addItem(item)
     }

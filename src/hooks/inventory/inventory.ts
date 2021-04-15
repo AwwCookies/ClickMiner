@@ -9,9 +9,11 @@ export interface IInventoryFilterOptions {
 export class Inventory {
   protected inventory: Item[]
   private max: number
-  constructor() {
+  public name: string
+  constructor(name: string) {
     this.inventory = []
     this.max = 250
+    this.name = name
   }
 
   getItems(): Item[] {
@@ -39,6 +41,7 @@ export class Inventory {
   }
 
   addItem(item: Item): void {
+    item.inventory = this
     this.inventory.push(item)
   }
 

@@ -1,3 +1,5 @@
+import { Inventory } from "./inventory"
+
 export type Rarity = 'common' | 'rare' | 'epic' | 'legendary'
 export type ItemType = 'potion' | 'gem' | "equipment" | "junk"
 
@@ -7,6 +9,8 @@ export class Item {
   private sellPrice: number
   private type: ItemType
   private description: string
+  public inventory: Inventory | null
+  // ? convert the options into an object?
   constructor(
     name: string, rarity: Rarity,
     sellPrice: number = 0, type: ItemType = "junk",
@@ -17,6 +21,7 @@ export class Item {
     this.sellPrice = sellPrice
     this.type = type
     this.description = description
+    this.inventory = null
   }
   getName(): string {
     return this.name
